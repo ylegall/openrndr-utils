@@ -47,6 +47,7 @@ bintray {
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
     }
 }
 
@@ -81,5 +82,3 @@ dependencies {
     // replace the following with functional slf4j library when using slf4j
     implementation 'org.slf4j:slf4j-nop:1.7.25'
 }
-
-
