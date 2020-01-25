@@ -35,11 +35,10 @@ bintray {
         licenses = ['GPL-3.0']
         vcsUrl = 'https://github.com/ylegall/openrndr-utils'
         version {
-            name = "$version"
+            name = "${project.version}"
             desc = 'initial commit'
             released  = new Date()
-            vcsTag = "$version"
-            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+            vcsTag = "v${project.version}"
         }
     }
 }
