@@ -15,7 +15,7 @@ repositories {
 }
 
 group = 'org.ygl'
-version = '0.0.2'
+version = '0.0.3'
 
 publishing {
     publications {
@@ -37,8 +37,8 @@ bintray {
         vcsUrl = 'https://github.com/ylegall/openrndr-utils'
         version {
             name = "${project.version}"
-            desc = 'initial commit'
-            released  = new Date()
+            desc = ''
+            released = new Date()
             vcsTag = "v${project.version}"
         }
     }
