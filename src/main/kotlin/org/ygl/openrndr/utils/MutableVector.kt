@@ -11,6 +11,11 @@ data class MutableVector(
     constructor(vector: MutableVector): this(vector.x, vector.y)
     constructor(vector2: Vector2): this(vector2.x, vector2.y)
 
+    fun set(x: Number, y: Number) {
+        this.x = x.toDouble()
+        this.y = y.toDouble()
+    }
+
     operator fun <T: Number> timesAssign(scalar: T) {
         val doubleValue = scalar.toDouble()
         x *= doubleValue
