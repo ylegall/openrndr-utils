@@ -3,15 +3,15 @@ package org.ygl.openrndr.utils
 import org.openrndr.color.ColorRGBa
 
 fun randomColorRGBa(
-        r: Double? = null,
-        g: Double? = null,
-        b: Double? = null,
-        a: Double? = null
+        r: Number? = null,
+        g: Number? = null,
+        b: Number? = null,
+        a: Number? = null
 ) = ColorRGBa(
-        r ?: randomDoubleColor(),
-        g ?: randomDoubleColor(),
-        b ?: randomDoubleColor(),
-        a ?: randomDoubleColor()
+        r?.toDouble() ?: randomDoubleColor(),
+        g?.toDouble() ?: randomDoubleColor(),
+        b?.toDouble() ?: randomDoubleColor(),
+        a?.toDouble() ?: randomDoubleColor()
 )
 
 private fun randomIntChannel() = (0..255).random()

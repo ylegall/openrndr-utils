@@ -24,7 +24,3 @@ inline fun Drawer.isolatedWithTarget(target: RenderTarget, block: Drawer.() -> U
     isolated(block)
     target.unbind()
 }
-
-fun <T: Number> Drawer.rect(x: T, y: T, width: T, height: T) {
-    rectangle(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble())
-}
