@@ -10,6 +10,10 @@ class QuadTree<T>(
         val maxRegionCapacity: Int = 4
 ): SpatialMap<T> {
 
+    constructor(width: Number, height: Number): this(
+            rect(0, 0, width, height)
+    )
+
     data class QuadTreeEntry<V>(
             val position: Vector2,
             val value: V
@@ -17,6 +21,7 @@ class QuadTree<T>(
 
     private var children: List<QuadTree<T>> = emptyList()
     private var entries: MutableList<QuadTreeEntry<T>> = mutableListOf()
+    override var size = 0; private set
 
     override fun add(x: Number, y: Number, item: T) = add(vector2(x, y), item)
 
@@ -28,6 +33,10 @@ class QuadTree<T>(
             else -> {
                 subdivide()
                 addToChildren(QuadTreeEntry(position, item))
+            }
+        }.also { addSucceeded ->
+            if (addSucceeded) {
+                size++
             }
         }
     }
@@ -47,6 +56,38 @@ class QuadTree<T>(
             point !in bounds -> false
             children.isEmpty() -> entries.any { it.position == point }
             else -> children.any { it.contains(point) }
+        }
+    }
+
+    override fun remove(x: Number, y: Number, item: T) = remove(vector2(x, y), item)
+
+    fun remove(point: Vector2, item: T): Boolean {
+        return removeInternal(QuadTreeEntry(point, item))
+    }
+
+    override fun clear() {
+        children = emptyList()
+        entries.clear()
+        size = 0
+    }
+
+    private fun removeInternal(entry: QuadTreeEntry<T>): Boolean {
+        return when {
+            entry.position !in bounds -> false
+            children.isEmpty() -> entries.remove(entry)
+            else -> {
+                val removed = children.find { entry.position in it.bounds }?.removeInternal(entry) ?: false
+                if (removed) {
+                    if (children.sumBy { it.size } == 0) {
+                        children = emptyList()
+                    }
+                }
+                removed
+            }
+        }.also { removed ->
+            if (removed) {
+                size--
+            }
         }
     }
 
