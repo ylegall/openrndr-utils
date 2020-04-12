@@ -18,6 +18,10 @@ fun Vector2.rotate(amount: Radians): Vector2 {
     )
 }
 
+fun Vector2.distanceFrom(otherPoint: Vector2): Double {
+    return sqrt((x - otherPoint.x).pow(2) + (y - otherPoint.y).pow(2))
+}
+
 fun <T: Number> Vector2.distanceFrom(x: T, y: T): Double {
     return sqrt((this.x - x.toDouble()).pow(2) + (this.y - y.toDouble()).pow(2))
 }
