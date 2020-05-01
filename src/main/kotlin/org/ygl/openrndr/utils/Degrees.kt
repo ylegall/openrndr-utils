@@ -6,4 +6,4 @@ inline class Degrees(
     fun toRadians() = Radians(value * Math.PI / 180.0)
 }
 
-val <T: Number> T.degrees: Degrees; get() = Degrees(this.toDouble())
+fun <T: Number> T.degrees() = Degrees(this.toDouble())

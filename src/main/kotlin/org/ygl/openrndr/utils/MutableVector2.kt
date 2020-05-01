@@ -46,6 +46,11 @@ data class MutableVector2(
         y -= vector.y
     }
 
+    operator fun minusAssign(vector: Vector2) {
+        x -= vector.x
+        y -= vector.y
+    }
+
     operator fun minus(vector: MutableVector2) = MutableVector2(
             x - vector.x,
             y - vector.y

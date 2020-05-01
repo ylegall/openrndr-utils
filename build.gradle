@@ -7,6 +7,7 @@ plugins {
 
 ext.kotlinVersion = "1.3.72"
 ext.openrndrVersion = "0.3.40"
+ext.orxVersion = "0.3.50"
 
 repositories {
 	mavenCentral()
@@ -16,7 +17,7 @@ repositories {
 }
 
 group = 'org.ygl'
-version = '0.0.12'
+version = '0.0.13'
 
 publishing {
     publications {
@@ -47,7 +48,7 @@ bintray {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
     }
 }
@@ -78,6 +79,7 @@ dependencies {
     implementation "org.openrndr:openrndr-extensions:$openrndrVersion"
     implementation "org.openrndr:openrndr-filter:$openrndrVersion"
     implementation "org.openrndr:openrndr-ffmpeg:$openrndrVersion"
+    implementation "org.openrndr.extra:orx-mesh-generators:$orxVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

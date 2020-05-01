@@ -4,6 +4,7 @@ import org.openrndr.color.ColorRGBa
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
+import org.openrndr.shape.Segment
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -27,6 +28,16 @@ fun randomFloat(from: Number, until: Number): Float {
     return start + Random.nextFloat() * range
 }
 
+fun Random.nextFloat(until: Number = 1f): Float {
+    return nextFloat() * until.toFloat()
+}
+
+fun Random.nextFloat(from: Number, until: Number): Float {
+    val start = from.toFloat()
+    val range = until.toFloat() - start
+    return start + nextFloat() * range
+}
+
 fun Circle.randomPoint(random: Random = Random.Default): Vector2 {
     val randomAngle = random.nextDouble(2 * PI)
     val randomRadius = random.nextDouble(radius)
@@ -36,10 +47,12 @@ fun Circle.randomPoint(random: Random = Random.Default): Vector2 {
     )
 }
 
-fun Rectangle.randomPoint() = Vector2(
-        Random.nextDouble(x, x + width),
-        Random.nextDouble(y, y + height)
+fun Rectangle.randomPoint(random: Random = Random) = Vector2(
+        random.nextDouble(x, x + width),
+        random.nextDouble(y, y + height)
 )
+
+fun Segment.randomPoint(random: Random = Random) = mix(start, end, random.nextDouble())
 
 fun randomColor(r: Number? = null, g: Number? = null, b: Number? = null) = ColorRGBa(
         r?.toDouble() ?: Random.nextDouble(),
