@@ -8,9 +8,12 @@ import kotlin.random.Random
 
 
 class ColorMap(
-        private val colorIntervals: List<ColorRGBa>
+        val colorIntervals: List<ColorRGBa>
 ) {
-    constructor(hexStrings: Iterable<String>): this(hexStrings.map { rgb(it) })
+    constructor(
+            hexStrings: Iterable<String>,
+            opacity: Double = 1.0
+    ): this(hexStrings.map { rgb(it).opacify(opacity) })
 
     init {
         check(colorIntervals.isNotEmpty()) { "colorIntervals must not be empty" }

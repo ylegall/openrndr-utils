@@ -1,7 +1,9 @@
 package org.ygl.openrndr.utils
 
 import org.openrndr.color.ColorRGBa
+import org.openrndr.math.Spherical
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Segment
@@ -66,3 +68,19 @@ fun randomColor(r: Number? = null, g: Number? = null, b: Number? = null, a: Numb
         b?.toDouble() ?: Random.nextDouble(),
         a?.toDouble() ?: Random.nextDouble()
 )
+
+fun randomSphereSurfacePoint(
+        center: Vector3 = Vector3.ZERO,
+        radius: Double = 1.0,
+        random: Random = Random.Default
+) = Vector3.fromSpherical(
+        Spherical(random.nextDouble(360.0), random.nextDouble(180.0), radius)
+) + center
+
+fun randomSpherePoint(
+        center: Vector3 = Vector3.ZERO,
+        radius: Double = 1.0,
+        random: Random = Random.Default
+) = Vector3.fromSpherical(
+        Spherical(random.nextDouble(360.0), random.nextDouble(180.0), random.nextDouble(radius))
+) + center

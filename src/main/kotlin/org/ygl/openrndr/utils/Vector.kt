@@ -1,6 +1,7 @@
 package org.ygl.openrndr.utils
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.Vector3
 import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
