@@ -34,7 +34,7 @@ class DepthOfFieldBlur(
 
     fun computeBlur(
             drawer: Drawer,
-            drawFunction: (Drawer) -> Unit
+            drawFunction: Drawer.() -> Unit
     ) {
         val lookAt = camera.lookAt
         val sphericalEye = camera.spherical
@@ -42,7 +42,7 @@ class DepthOfFieldBlur(
         drawer.isolatedWithTarget(blurTarget) {
             drawStyle.blendMode = BlendMode.OVER
             camera.applyTo(drawer)
-            drawFunction(drawer)
+            drawFunction()
         }
 
         for (i in 0 until blurIterations) {
@@ -55,7 +55,7 @@ class DepthOfFieldBlur(
             drawer.isolatedWithTarget(imageTarget) {
                 camera.setView(lookAt, newPosition, camera.fov)
                 camera.applyTo(drawer)
-                drawFunction(drawer)
+                drawFunction()
             }
 
             // then copy to accumulation buffer

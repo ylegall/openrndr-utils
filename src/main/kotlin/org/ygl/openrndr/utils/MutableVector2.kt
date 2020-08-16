@@ -6,8 +6,8 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 data class MutableVector2(
-        var x: Double,
-        var y: Double
+        var x: Double = 0.0,
+        var y: Double = 0.0
 ) {
 
     constructor(x: Number, y: Number): this(x.toDouble(), y.toDouble())
@@ -73,6 +73,12 @@ data class MutableVector2(
     }
 
     fun squaredLength() = x * x + y * y
+
+    fun distanceFrom(x: Number, y: Number): Double {
+        val dx = this.x - x.toDouble()
+        val dy = this.y - y.toDouble()
+        return sqrt(dx * dx + dy * dy)
+    }
 
     fun toVector2() = Vector2(x, y)
 }

@@ -1,9 +1,11 @@
 package org.ygl.openrndr.utils
 
 import org.openrndr.color.ColorRGBa
+import org.openrndr.math.Polar
 import org.openrndr.math.Spherical
 import org.openrndr.math.Vector2
 import org.openrndr.math.Vector3
+import org.openrndr.math.mix
 import org.openrndr.shape.Circle
 import org.openrndr.shape.Rectangle
 import org.openrndr.shape.Segment
@@ -84,3 +86,5 @@ fun randomSpherePoint(
 ) = Vector3.fromSpherical(
         Spherical(random.nextDouble(360.0), random.nextDouble(180.0), random.nextDouble(radius))
 ) + center
+
+fun randomUnitVector(random: Random = Random) = Vector2.fromPolar(Polar(360 * random.nextDouble(), 1.0))

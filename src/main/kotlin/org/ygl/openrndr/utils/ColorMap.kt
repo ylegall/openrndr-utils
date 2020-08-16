@@ -19,6 +19,8 @@ class ColorMap(
         check(colorIntervals.isNotEmpty()) { "colorIntervals must not be empty" }
     }
 
+    val size; get() = colorIntervals.size
+
     private val intervalSize = 1.0 / (colorIntervals.size - 1)
 
     fun random() = get(Random.nextDouble())

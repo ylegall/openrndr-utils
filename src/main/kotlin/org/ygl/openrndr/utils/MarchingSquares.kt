@@ -1,6 +1,7 @@
 package org.ygl.openrndr.utils
 
 import org.openrndr.math.Vector2
+import org.openrndr.math.mix
 import org.openrndr.shape.Shape
 import org.openrndr.shape.shape
 
@@ -56,11 +57,6 @@ fun marchingSquaresThreshold(
             key = key or if (brv.value > threshold) 2 else 0
             key = key or if (trv.value > threshold) 4 else 0
             key = key or if (tlv.value > threshold) 8 else 0
-
-            //val tl = tlv.value > threshold
-            //val tr = trv.value > threshold
-            //val bl = blv.value > threshold
-            //val br = brv.value > threshold
 
             when (key) {
                 // 0
