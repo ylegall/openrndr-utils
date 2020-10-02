@@ -2,6 +2,7 @@ package org.ygl.openrndr.utils
 
 import org.openrndr.math.smoothstep
 import kotlin.math.abs
+import kotlin.math.exp
 
 // https://www.iquilezles.org/www/articles/functions/functions.htm
 
@@ -25,4 +26,9 @@ fun cubicPulse(center: Double, halfwidth: Double, x: Double): Double {
     if (x1 > halfwidth) return 0.0
     x1 /= halfwidth
     return 1.0 - x1 * x1 * (3.0 - 2.0 * x1)
+}
+
+fun expImpulse(x: Double, k: Double): Double {
+    val h = k * x
+    return h * exp(1 - h)
 }
