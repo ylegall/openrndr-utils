@@ -58,10 +58,10 @@ fun Rectangle.randomPoint(random: Random = Random) = Vector2(
 
 fun Segment.randomPoint(random: Random = Random) = mix(start, end, random.nextDouble())
 
-fun randomColor(r: Number? = null, g: Number? = null, b: Number? = null) = ColorRGBa(
-        r?.toDouble() ?: Random.nextDouble(),
-        g?.toDouble() ?: Random.nextDouble(),
-        b?.toDouble() ?: Random.nextDouble()
+fun randomColor(random: Random = Random, r: Number? = null, g: Number? = null, b: Number? = null) = ColorRGBa(
+        r?.toDouble() ?: random.nextDouble(),
+        g?.toDouble() ?: random.nextDouble(),
+        b?.toDouble() ?: random.nextDouble()
 )
 
 fun randomColor(r: Number? = null, g: Number? = null, b: Number? = null, a: Number? = null) = ColorRGBa(
@@ -87,4 +87,10 @@ fun randomSpherePoint(
         Spherical(random.nextDouble(360.0), random.nextDouble(180.0), random.nextDouble(radius))
 ) + center
 
-fun randomUnitVector(random: Random = Random) = Vector2.fromPolar(Polar(360 * random.nextDouble(), 1.0))
+fun randomVector2(random: Random = Random) = Vector2(random.nextDouble(), random.nextDouble())
+
+fun randomDirection2D(random: Random = Random) = Vector2.fromPolar(Polar(360 * random.nextDouble(), 1.0))
+
+fun randomDirection3D(random: Random = Random) = Vector3.fromSpherical(
+        Spherical(random.nextDouble(360.0), random.nextDouble(180.0), 1.0)
+)
