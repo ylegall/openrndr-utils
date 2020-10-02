@@ -12,3 +12,6 @@ fun <T: Number> color(r: T, g: T, b: T, a: T) = ColorRGBa(
         a.toDouble() / 255
 )
 
+fun ColorRGBa.grayscaleLinear(): Double {
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+}
