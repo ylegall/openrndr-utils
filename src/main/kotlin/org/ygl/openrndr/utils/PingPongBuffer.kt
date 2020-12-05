@@ -1,43 +1,44 @@
 package org.ygl.openrndr.utils
 
+import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.BufferMultisample
+import org.openrndr.draw.ColorFormat
+import org.openrndr.draw.ColorType
+import org.openrndr.draw.Drawer
 import org.openrndr.draw.RenderTarget
 import org.openrndr.draw.RenderTargetBuilder
 import org.openrndr.draw.Session
+import org.openrndr.draw.colorBuffer
 import org.openrndr.draw.renderTarget
 
-
 class PingPongBuffer(
-        val renderTarget1: RenderTarget,
-        val renderTarget2: RenderTarget
+        width: Int,
+        height: Int,
+        contentScale: Double = 1.0,
+        format: ColorFormat = ColorFormat.RGBa,
+        type: ColorType = ColorType.UINT8,
+        multisample: BufferMultisample = BufferMultisample.Disabled,
+        levels: Int = 1,
+        session: Session? = Session.active
 ) {
-    private var prev = renderTarget1
-    private var curr = renderTarget2
+    private var buffer1 = colorBuffer(width, height, contentScale, format, type, multisample, levels, session)
+    private var buffer2 = colorBuffer(width, height, contentScale, format, type, multisample, levels, session)
+
+    private var curr = buffer2
+    private var prev = buffer1
 
     fun swap() {
-        if (prev === renderTarget1) {
-            prev = renderTarget2
-            curr = renderTarget1
-        } else {
-            prev = renderTarget1
-            curr = renderTarget2
-        }
+        val temp = curr
+        curr = prev
+        prev = temp
     }
 
-    fun current() = curr
+    fun fill(color: ColorRGBa) {
+        curr.fill(color)
+        prev.fill(color)
+    }
 
-    fun previous() = prev
+    fun src() = prev
+
+    fun dst() = curr
 }
-
-fun pingPongBuffer(width: Int, height: Int,
-                   contentScale: Double = 1.0,
-                   multisample: BufferMultisample = BufferMultisample.Disabled,
-                   session: Session? = Session.active,
-                   builder: RenderTargetBuilder.() -> Unit
-): PingPongBuffer {
-    return PingPongBuffer(
-            renderTarget(width, height, contentScale, multisample, session, builder),
-            renderTarget(width, height, contentScale, multisample, session, builder)
-    )
-}
-

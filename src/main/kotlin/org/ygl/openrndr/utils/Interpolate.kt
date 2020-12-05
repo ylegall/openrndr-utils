@@ -3,6 +3,7 @@ package org.ygl.openrndr.utils
 import org.openrndr.math.smoothstep
 import kotlin.math.abs
 import kotlin.math.exp
+import kotlin.math.pow
 
 // https://www.iquilezles.org/www/articles/functions/functions.htm
 
@@ -31,4 +32,21 @@ fun cubicPulse(center: Double, halfwidth: Double, x: Double): Double {
 fun expImpulse(x: Double, k: Double): Double {
     val h = k * x
     return h * exp(1 - h)
+}
+
+fun parabola(x: Double, k: Double): Double {
+    return (4.0 * x * (1.0 - x)).pow(k)
+}
+
+fun Double.wrapIn(range: ClosedRange<Double>): Double {
+    return wrapIn(range.start, range.endInclusive)
+}
+
+fun Double.wrapIn(start: Double, stop: Double): Double {
+    val rangeSize = stop - start
+    return when {
+        this < start -> stop - ((start - this) % rangeSize)
+        this >= stop -> start + ((this - stop) % rangeSize)
+        else         -> this
+    }
 }
