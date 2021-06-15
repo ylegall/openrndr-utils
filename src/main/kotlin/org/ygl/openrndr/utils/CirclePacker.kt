@@ -2,11 +2,13 @@ package org.ygl.openrndr.utils
 
 import org.openrndr.math.Vector2
 import org.openrndr.shape.Circle
+import org.openrndr.shape.Rectangle
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import kotlin.math.PI
 import kotlin.math.min
+import kotlin.math.sqrt
 
 
 class CirclePacker(
@@ -122,7 +124,7 @@ class CirclePacker(
                 val leftDist = left.minDistFromNeighbors() ?: return emptyList()
                 allPoints.add(left)
                 minDist = min(minDist, leftDist)
-            } else if (pos.x > params.bounds.x + params.bounds.width - params.maxRadius) {
+            } else if (pos.x + params.maxRadius > params.bounds.x + params.bounds.width) {
                 val right = pos - Vector2(params.bounds.width, 0.0)
                 val rightDist = right.minDistFromNeighbors() ?: return emptyList()
                 allPoints.add(right)
@@ -133,7 +135,7 @@ class CirclePacker(
                 val downDist = down.minDistFromNeighbors() ?: return emptyList()
                 allPoints.add(down)
                 minDist = min(minDist, downDist)
-            } else if (pos.y > params.bounds.y + params.bounds.height - params.maxRadius) {
+            } else if (pos.y + params.maxRadius > params.bounds.y + params.bounds.height) {
                 val up = pos - Vector2(0.0, params.bounds.height)
                 val upDist = up.minDistFromNeighbors() ?: return emptyList()
                 allPoints.add(up)
@@ -166,17 +168,28 @@ class CirclePacker(
 
     private fun Vector2.minDistanceFromNeighbors(circles: List<Circle>) = circles.map {
         this.distanceTo(it)
-    }.min() ?: params.maxRadius
+    }.minOrNull() ?: params.maxRadius
 
     private fun Vector2.minDistanceFromBoundary() = min(
-            min(this.x - params.bounds.x, params.bounds.x + params.bounds.width - x + params.bounds.x),
-            min(this.y - params.bounds.y, params.bounds.y + params.bounds.height - y + params.bounds.y)
+            //min(x - params.bounds.x, params.bounds.x + params.bounds.width - x + params.bounds.x),
+            //min(y - params.bounds.y, params.bounds.y + params.bounds.height - y + params.bounds.y)
+        min(x - params.bounds.x, params.bounds.x + params.bounds.width - x),
+        min(y - params.bounds.y, params.bounds.y + params.bounds.height - y)
     )
 
     // null means that we are overlapping
     private fun Vector2.neighbors(): List<Circle>? {
         val maxDist = 2 * params.maxRadius + params.padding
-        val nearbyCircles = params.spatialMap.queryRange(this.x - maxDist, this.y - maxDist, 2 * maxDist, 2 * maxDist).filter {
+        //val nearbyCircles = params.spatialMap.queryRange(this.x - maxDist, this.y - maxDist, 2 * maxDist, 2 * maxDist).filter {
+        //    this.distanceTo(it) <= maxDist
+        //}
+        val searchArea = Rectangle.fromCenter(this, 2 * sqrt(2.0) * params.maxRadius)
+        val nearbyCircles = params.spatialMap.queryRange(
+            searchArea.corner.x,
+            searchArea.corner.y,
+            searchArea.corner.x + searchArea.width,
+            searchArea.corner.y + searchArea.height
+        ).filter {
             this.distanceTo(it) <= maxDist
         }
 
@@ -192,4 +205,27 @@ class CirclePacker(
     //    val nearbyCircles = params.spatialMap.queryRange(queryBounds.x, queryBounds.y, queryBounds.width, queryBounds.height)
     //    return nearbyCircles.any { it.contains(this) }
     //}
+}
+
+fun circlePackingFromPoints(
+    points: List<Vector2>,
+    maxRadius: Double,
+    minRadius: Double = 0.0,
+): List<Circle> {
+    if (points.isEmpty()) {
+        return emptyList()
+    }
+    val kd = KDTree2.fromPoints(points.indices.toList()) { points[it] }
+    val radii = MutableList(points.size) { minRadius }
+    for (i in points.indices) {
+        val bounds = Rectangle.fromCenter(points[i], 4 * maxRadius)
+        val neighbors = kd.queryRange(bounds)
+        val minDist = neighbors.asSequence().filter {
+            it != i
+        }.map {
+            points[i].distanceTo(points[it]) - radii[it]
+        }.minOrNull() ?: maxRadius * 0.7
+        radii[i] = minDist
+    }
+    return points.zip(radii).map { Circle(it.first, it.second) }
 }
